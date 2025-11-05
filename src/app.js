@@ -1,17 +1,21 @@
+// src/app.js
 import express from "express";
 import mocksRouter from "./routes/mocks.router.js";
-import { connectDB } from "./database.js";
+import usersRouter from "./routes/users.router.js";
+import adoptionRouter from "./routes/adoption.router.js";
+import swaggerUi from "swagger-ui-express";
+import { swaggerSpecs } from "./swagger.js";
 
 const app = express();
-const PORT = 8080;
 
 app.use(express.json());
 
-// Ruta base
+// Swagger UI
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
+
+// Rutas
 app.use("/api/mocks", mocksRouter);
+app.use("/api/users", usersRouter);
+app.use("/api/adoptions", adoptionRouter);
 
-connectDB();
-
-app.listen(PORT, () => {
-  console.log(`✅ Servidor corriendo en http://localhost:${PORT}`);
-});
+export default app;
